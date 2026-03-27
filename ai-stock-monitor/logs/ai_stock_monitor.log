@@ -1,0 +1,5 @@
+2026-03-26 00:57:07 - root - ERROR - 获取实时行情失败 000001.SZ: 404 Client Error: Not Found for url: https://push2.eastmoney.com/qt/get?f=12&secid=0.000001&ut=fa5fd1ed4b5ca9f5a8b0d58b1b0b1b0b&cb=jsonp_cb_123&_=1774457827635
+2026-03-26 00:57:07 - root - ERROR - 获取实时行情失败 600000.SH: 404 Client Error: Not Found for url: https://push2.eastmoney.com/qt/get?f=12&secid=1.600000&ut=fa5fd1ed4b5ca9f5a8b0d58b1b0b1b0b&cb=jsonp_cb_123&_=1774457827874
+2026-03-26 00:57:07 - root - ERROR - 获取实时行情失败 600519.SH: 404 Client Error: Not Found for url: https://push2.eastmoney.com/qt/get?f=12&secid=1.600519&ut=fa5fd1ed4b5ca9f5a8b0d58b1b0b1b0b&cb=jsonp_cb_123&_=1774457827918
+2026-03-26 00:57:07 - root - ERROR - 获取实时行情失败 000858.SZ: 404 Client Error: Not Found for url: https://push2.eastmoney.com/qt/get?f=12&secid=0.000858&ut=fa5fd1ed4b5ca9f5a8b0d58b1b0b1b0b&cb=jsonp_cb_123&_=1774457827957
+2026-03-26 00:57:08 - root - ERROR - 获取实时行情失败 300750.SZ: 404 Client Error: Not Found for url: https://push2.eastmoney.com/qt/get?f=12&secid=0.300750&ut=fa5fd1ed4b5ca9f5a8b0d58b1b0b1b0b&cb=jsonp_cb_123&_=1774457827996

@@ -1,0 +1,32 @@
+.
+├── config/
+│   ├── __init__.py
+│   ├── settings.py
+│   └── logging_config.py
+├── data/
+│   ├── __init__.py
+│   ├── data_fetcher.py
+│   └── data_storage.py
+├── analyzer/
+│   ├── __init__.py
+│   ├── tech_analyzer.py
+│   └── ai_analyzer.py
+├── monitor/
+│   ├── __init__.py
+│   └── stock_monitor.py
+├── trader/
+│   ├── __init__.py
+│   └── sim_trader.py
+├── ui/
+│   ├── __init__.py
+│   ├── web_ui.py
+│   └── static/
+│       └── style.css
+├── logs/
+├── main.py
+├── requirements.txt
+├── setup.bat
+├── build_exe.bat
+├── README.md
+├── LICENSE
+└── .env

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  ai-stock-monitor:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./logs:/app/logs
+      - ./data_storage:/app/data_storage
+    environment:
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - TUSHARE_TOKEN=${TUSHARE_TOKEN:-}
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "main.py", "demo"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  ollama_data:

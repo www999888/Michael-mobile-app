@@ -1,0 +1,153 @@
+{
+  "gateway": {
+    "port": 18789,
+    "bind": "0.0.0.0"
+  },
+  "$schema": "https://openclaw.dev/schemas/config.schema.json",
+  "meta": {
+    "lastTouchedVersion": "2026.3.11",
+    "lastTouchedAt": "2026-03-16T02:04:34.703Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-13T11:00:04.204Z",
+    "lastRunVersion": "2026.3.11",
+    "lastRunCommand": "configure",
+    "lastRunMode": "local"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "ollama": {
+        "baseUrl": "http://127.0.0.1:11434",
+        "apiKey": "ollama-local",
+        "api": "ollama",
+        "models": [
+          {
+            "id": "qwen3.5:35b",
+            "name": "qwen3.5:35b",
+            "reasoning": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 262144
+          },
+          {
+            "id": "glm-4.7-flash",
+            "name": "glm-4.7-flash",
+            "reasoning": true,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 202752,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "ollama/glm-4.7-flash"
+      },
+      "models": {
+        "ollama/glm-4.7-flash": {}
+      },
+      "compaction": {
+        "mode": "safeguard"
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "feishu",
+        "accountId": "default"
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "feishu": {
+      "appId": "cli_a93fbcd578f81bca",
+      "appSecret": "IIYIvEFUpk39ModiCgO37dunW02WWFfG",
+      "connectionMode": "websocket",
+      "defaultReceiver": "ou_f06c9276db39691ddba7cac4a815074b",
+      "dmPolicy": "pairing",
+      "domain": "feishu",
+      "enabled": true,
+      "encryptKey": "IIYIvEFUpk39ModiCgO37dunW02WWFfG",
+      "groupPolicy": "open",
+      "systemPrompt": "你是一个飞书机器人助手，帮助用户管理文档、文件和知识库。",
+      "tools": {
+        "doc": true,
+        "drive": true,
+        "perm": false,
+        "wiki": true
+      },
+      "type": "app",
+      "verificationToken": "AHU37VGj7LsVZvsil4MLhTkcTPzAXllu",
+      "webhookPath": "/feishu/webhook"
+    },
+    "qqbot": {
+      "enabled": true,
+      "allowFrom": [
+        "*"
+      ],
+      "appId": "1903526528",
+      "clientSecret": "Ut7A1g8OSJxPegVB"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "EtPeeBZt4deeahDMJ3KFdbcqBrtaxzDk"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      },
+      "openclaw-qqbot": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "openclaw-qqbot": {
+        "source": "npm",
+        "spec": "@tencent-connect/openclaw-qqbot@latest",
+        "installPath": "C:\\Users\\admin\\.openclaw\\extensions\\openclaw-qqbot",
+        "version": "1.5.7",
+        "resolvedName": "@tencent-connect/openclaw-qqbot",
+        "resolvedVersion": "1.5.7",
+        "resolvedSpec": "@tencent-connect/openclaw-qqbot@1.5.7",
+        "integrity": "sha512-L7FmpZFRCPE8rx5T4QXeAKfoOv+UTkOBIyIcur4VPR4WVfEWAN+GMCa88VZYUf89zy834BaNzJNkHbYdasMqIg==",
+        "shasum": "e9ecfe9edd661bad52c78d01abd4f0817f3cbfae",
+        "resolvedAt": "2026-03-16T02:02:57.808Z",
+        "installedAt": "2026-03-16T02:03:32.274Z"
+      }
+    }
+  }
+}
