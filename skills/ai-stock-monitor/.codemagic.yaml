@@ -1,26 +1,136 @@
 # Codemagic Configuration
-# AI Stock Monitor CI/CD Pipeline
+# AI Stock Monitor - Full CI/CD Pipeline
 
 workflows:
   ai-stock-monitor-ci:
-    name: CI Build & Test
+    name: AI Stock Monitor - CI Build & Test
     max_build_duration: 30
     instance_type: mac_mini_m2
     environment:
       python: 3.11
+      env:
+        - PYTHONIOENCODING: UTF-8
+
+    triggering:
+      events:
+        - push
+        - tag
 
     scripts:
-      - python --version
-      - pip install -r requirements.txt
-      - python main.py demo
+      - name: Python environment check
+        script: |
+          echo "Python version: $PYTHON_VERSION"
+          python --version
+          pip --version
+          python -m venv venv
+          source venv/bin/activate
+      
+      - name: Install dependencies
+        script: |
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        script: |
+          source venv/bin/activate
+          python test_all.py
 
   ai-stock-monitor-pypi:
-    name: PyPI Release
+    name: AI Stock Monitor - PyPI Release
+    max_build_duration: 45
+    instance_type: mac_mini_m2
+    environment:
+      python: 3.11
+      env:
+        - PYTHONIOENCODING: UTF-8
+
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: release/*
+          include: true
+
+    scripts:
+      - name: Version detection
+        script: |
+          export VERSION=$(echo $CM_TAG_NAME | sed 's/v//')
+          echo "Release version: $VERSION"
+      
+      - name: Build Python package
+        script: |
+          source venv/bin/activate
+          pip install setuptools wheel twine build
+          python -m build
+      
+      - name: Upload to TestPyPI
+        script: |
+          source venv/bin/activate
+          twine upload --repository testpypi dist/*
+
+  ai-stock-monitor-docker:
+    name: AI Stock Monitor - Docker Build & Push
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      python: 3.11
+      docker:
+        version: latest
+      env:
+        - PYTHONIOENCODING: UTF-8
+        - DOCKER_USERNAME: $DOCKER_USERNAME
+        - DOCKER_PASSWORD: $DOCKER_PASSWORD
+        - DOCKER_EMAIL: $DOCKER_EMAIL
+
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: release/*
+          include: true
+
+    scripts:
+      - name: Docker login
+        script: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      
+      - name: Build Docker image
+        script: |
+          export VERSION=$(echo $CM_TAG_NAME | sed 's/v//')
+          docker build -t ai-stock-monitor:$VERSION .
+      
+      - name: Push Docker image
+        script: |
+          docker push ai-stock-monitor:$VERSION
+
+  ai-stock-monitor-github-release:
+    name: AI Stock Monitor - GitHub Release
     max_build_duration: 30
     instance_type: mac_mini_m2
     environment:
       python: 3.11
+      env:
+        - GITHUB_TOKEN: $GITHUB_TOKEN
+
+    triggering:
+      events:
+        - tag
+      branch_patterns:
+        - pattern: release/*
+          include: true
 
     scripts:
-      - pip install twine
-      - twine upload dist/*
+      - name: Create GitHub Release
+        script: |
+          export VERSION=$(echo $CM_TAG_NAME | sed 's/v//')
+          gh release create "$VERSION" \
+            --title "AI Stock Monitor v$VERSION" \
+            --notes "Release v$VERSION"
+          
+          echo "GitHub Release created!"
+
+definitions:
+  common_env:
+    - PYTHONIOENCODING: UTF-8
+    - LC_ALL: en_US.UTF-8
