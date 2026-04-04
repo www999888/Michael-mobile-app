@@ -19,14 +19,13 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # 核心修复：指定项目在 frontend 目录
       - name: Install dependencies
         run: flutter pub get
-        working-directory: ./frontend # 关键！指向你的项目目录
+        working-directory: ./frontend # 正确路径，无多余点
 
       - name: Build Flutter Web
         run: flutter build web --release
-        working-directory: ./frontend # 保持目录一致
+        working-directory: ./frontend # 保持路径一致
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -35,5 +34,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          # 构建产物在 frontend/build/web
-          working-directory: ./frontend/build/web
+          working-directory: ./frontend/build/web # 正确构建产物路径
