@@ -1,47 +1,35 @@
 name: Flutter Build & Vercel Deploy
 
-# 触发条件：推送到 main 分支、创建 PR 时
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  # 1. PR 预览部署（自动给 PR 加预览链接）
-  preview:
-    if: github.event_name == 'pull_request'
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy PR Preview to Vercel
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.16.0
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter Web
+        run: flutter build web --release
+
+      - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          # 自动给 PR 评论预览链接
-          github-comment: true
-
-  # 2. 生产部署（带审批门，必须人工确认才能上线）
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    # 关键：关联 production 环境，触发审批
-    environment:
-      name: production
-      url: https://your-vercel-domain.vercel.app # 后续会自动更新
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to Vercel Production
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          # 生产环境部署参数
           vercel-args: '--prod'
+          working-directory: ./build/web
