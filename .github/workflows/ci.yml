@@ -15,14 +15,18 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.38.3'  # 已匹配你本地版本
-          channel: stable
+          flutter-version: '3.38.3' # 完全匹配你本地版本
+          channel: 'stable'
+          cache: true
 
+      # 核心修复：指定项目在 frontend 目录
       - name: Install dependencies
         run: flutter pub get
+        working-directory: ./frontend # 关键！指向你的项目目录
 
       - name: Build Flutter Web
         run: flutter build web --release
+        working-directory: ./frontend # 保持目录一致
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
@@ -31,4 +35,5 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: ./build/web
+          # 构建产物在 frontend/build/web
+          working-directory: ./frontend/build/web
